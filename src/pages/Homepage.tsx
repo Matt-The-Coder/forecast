@@ -111,9 +111,6 @@ export const Homepage = () => {
         }
     }
 
-    const handleExportFile = () => {
-        console.log("handleExportFile")
-    }
     const createForecast = (e: React.FormEvent) => {
         e.preventDefault();
         const daysToForecast = days || 30; // Default to 30 days if input is invalid
