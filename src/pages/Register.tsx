@@ -1,17 +1,21 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom";
 import {auth} from '../firebase/firebase'
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 
 export const RegisterPage = () => {
 
-  const [userCredential, setUserCredential] = useState({})
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('')
    const [rePassword, setRePassword] = useState('')
   const [wrongCredentials, setWrongCredentials] = useState(false)
   const navigate = useNavigate()
-
+  useEffect(()=>{
+    let isLoggedIn = localStorage.getItem("isLoggedIn")
+    if(isLoggedIn === "true"){
+      navigate('/')
+    }
+  }, [])
   const handleRegister = (e:any) => {
     e.preventDefault()
     try {
@@ -22,14 +26,11 @@ export const RegisterPage = () => {
         },3000)
       }else{
         createUserWithEmailAndPassword(auth, email, password)
-        .then((credential)=>{
-            setUserCredential({errorMessage:'', data: credential})
-            console.log(credential)
+        .then(()=>{
             alert('Account Successfully Created!')
             navigate('/login')
         }).catch(err => {
-            const errorMessage = err.message || 'An error occurred.';
-            setUserCredential({ errorMessage, data: '' });
+          console.log(err)
           });
       }
 

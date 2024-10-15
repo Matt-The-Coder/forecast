@@ -7,7 +7,6 @@ export const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('')
   const [wrongCredentials, setWrongCredentials] = useState(false)
-  const [userCredential, setUserCredentials] = useState({})
   const navigate = useNavigate()
   useEffect(()=>{
     let isLoggedIn = localStorage.getItem("isLoggedIn")
@@ -19,8 +18,7 @@ export const LoginPage = () => {
     e.preventDefault();
     try {
       signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential)=>{
-          setUserCredentials({errorMessage: '', data: userCredential})
+      .then(()=>{
           localStorage.setItem("isLoggedIn", "true")
           navigate('/')
       }).catch(err => {
