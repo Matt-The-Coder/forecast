@@ -1,26 +1,39 @@
-import { useState } from "react"
-
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { useEffect, useState } from "react"
+import { Link, useNavigate } from "react-router-dom";
+import {auth} from '../firebase/firebase'
 export const LoginPage = () => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('')
   const [wrongCredentials, setWrongCredentials] = useState(false)
-
-
-  // useEffect(()=>{
-  //   console.log(email)
-  // }, [email])
+  const [userCredential, setUserCredentials] = useState({})
+  const navigate = useNavigate()
+  useEffect(()=>{
+    let isLoggedIn = localStorage.getItem("isLoggedIn")
+    if(isLoggedIn === "true"){
+      navigate('/')
+    }
+  }, [])
   const handleLogin = (e:React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if(password == "11" && email=="johndoe@gmail.com"){
-      localStorage.setItem("isLoggedIn", "true")
-      location.href = "/"
-    }else{
-      setWrongCredentials(true)
-      setTimeout(()=>{
-        setWrongCredentials(false)
-      },2000)
+    try {
+      signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential)=>{
+          setUserCredentials({errorMessage: '', data: userCredential})
+          localStorage.setItem("isLoggedIn", "true")
+          navigate('/')
+      }).catch(err => {
+        setWrongCredentials(true)
+        setTimeout(()=>{
+          setWrongCredentials(false)
+        },2000)
+        console.log(err)
+      })
+    } catch (error) {
+      console.log(error)
     }
+
 
 
   }
@@ -36,15 +49,15 @@ export const LoginPage = () => {
       <h1 className="block text-2xl font-bold text-gray-800 dark:text-white">
         Login
       </h1>
-      {/* <p className="mt-2 text-sm text-gray-600 dark:text-neutral-400">
+      <p className="mt-2 text-sm text-gray-600 dark:text-neutral-400">
         Don't have an account yet?
-        <a
-          className="text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium dark:text-blue-500"
-          href="../examples/html/signup.html"
+        <Link
+          className="ml-1 text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium dark:text-blue-500"
+          to="/register"
         >
           Sign up here
-        </a>
-      </p> */}
+        </Link>
+      </p>
     </div>
     <div className="mt-5">
       {/* <button
@@ -76,10 +89,10 @@ export const LoginPage = () => {
           />
         </svg>
         Login with Google
-      </button>
+      </button> */}
       <div className="py-3 flex items-center text-xs text-gray-400 uppercase before:flex-1 before:border-t before:border-gray-200 before:me-6 after:flex-1 after:border-t after:border-gray-200 after:ms-6 dark:text-neutral-500 dark:before:border-neutral-600 dark:after:border-neutral-600">
         Or
-      </div> */}
+      </div>
       {/* Form */}
       <form onSubmit={(e)=>{handleLogin(e)}}>
         <div className="grid gap-y-4">
@@ -129,12 +142,12 @@ export const LoginPage = () => {
               >
                 Password
               </label>
-              <a
+              {/* <a
                 className="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium dark:text-blue-500"
                 href="../examples/html/recover-account.html"
               >
                 Forgot password?
-              </a>
+              </a> */}
             </div>
             <div className="relative">
               <input
@@ -171,7 +184,7 @@ export const LoginPage = () => {
           </div>
           {/* End Form Group */}
           {/* Checkbox */}
-          <div className="flex items-center">
+          {/* <div className="flex items-center">
             <div className="flex">
               <input
                 id="remember-me"
@@ -185,7 +198,7 @@ export const LoginPage = () => {
                 Remember me
               </label>
             </div>
-          </div>
+          </div> */}
           {/* End Checkbox */}
           <button
             type="submit"

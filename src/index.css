@@ -11,6 +11,12 @@ input::-webkit-inner-spin-button {
   margin: 0;
 } */
 
+.login{
+  background-image: url('/stock-bg.jpg');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
 
 .hide{
   opacity: 0;

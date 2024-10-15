@@ -10,6 +10,7 @@ import { ViewSales } from './pages/ViewSales';
 import { MainLayout } from './layouts/MainLayout';
 import { CreateItems } from './pages/CreateItems';
 import { CreateSales } from './pages/CreateSales';
+import { RegisterPage } from './pages/Register';
 declare global {
   interface Window {
     HSStaticMethods: IStaticMethods;
@@ -52,6 +53,7 @@ function App() {
     <>
     <Routes>
     <Route element={<LoginPage/>} path='/login' />
+    <Route element={<RegisterPage/>} path='/register' />
       <Route element={<MainLayout/>}>
       <Route element={<Homepage/>} path='/' />
       {/* Items */}
